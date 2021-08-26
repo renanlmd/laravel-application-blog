@@ -32,5 +32,10 @@ class AdminController extends Controller
         $allAdmin = User::where('is_admin', true)->paginate(3);
         return view('admin.gerencia-admin.list-all-admin', compact('allAdmin'));
     }
+
+    public function showAdmin(User $user)
+    {
+        return view('admin.gerencia-admin.details-admin', compact('user'));
+    }
     
 }

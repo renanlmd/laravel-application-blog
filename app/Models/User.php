@@ -30,7 +30,8 @@ class User extends Authenticatable
         'username',
         'password',
         'is_admin',
-        'created_at'
+        'created_at',
+        'activated'
     ];
 
     /**
@@ -79,14 +80,14 @@ class User extends Authenticatable
         return date('d/m/Y', strtotime($value));
     }
 
-    public function scopeRunQuery(Builder $query, $search, $perPage, $sorts)
+    public function scopeRunQuery(Builder $query, $search, array $sorts)
     {
         return $query->where('is_admin', true)
         ->where(function ($query) use ($search) {
             $query->where("name", "like", "%$search%")
             ->orWhere("email", "like", "%$search%")
             ->orWhere("username", "like", "%$search%");
-        })->orderBy($sorts['sortField'], $sorts['sortDirection'])->paginate($perPage);
+        })->orderBy($sorts['sortField'], $sorts['sortDirection'])->get();
 
     }
 }

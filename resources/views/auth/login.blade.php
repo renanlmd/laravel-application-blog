@@ -12,6 +12,12 @@
             </div>
         @endif
 
+        @if (session('user_blocked'))
+            <div class="mb-4 font-medium text-sm text-red-600">
+                {{ session('user_blocked') }}
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
 

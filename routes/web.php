@@ -17,10 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('admin')->name('admin.')->middleware(['auth','verified', 'is_admin', 'update_default_password'])->group(function(){
+Route::prefix('admin')->name('admin.')->middleware(['auth','verified', 'verify_user_activated', 'is_admin', 'update_default_password'])->group(function(){
 
     Route::get('home', [\App\Http\Controllers\Admin\AdminController::class, 'homeAdmin'])->name('home');
     Route::get('administradores', [\App\Http\Controllers\Admin\AdminController::class, 'listAdmin'])->name('listAllAdmins');
+    Route::get('detalhes-admin/{user}', [\App\Http\Controllers\Admin\AdminController::class, 'showAdmin'])->name('detailsAdmin');
     Route::get('novo-admin', [\App\Http\Controllers\Admin\AdminController::class, 'createNewAdmin'])->name('createUserAdmin');
     Route::get('nova-senha', [\App\Http\Controllers\Admin\AdminController::class, 'updatePassword'])->name('defineNewPassword');
 

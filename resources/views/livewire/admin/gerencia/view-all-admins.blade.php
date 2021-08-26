@@ -3,9 +3,8 @@
     
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="max-w-md mt-3">
-            <x-jet-input type="text" class="mt-1 block w-full" wire:model="filters.search" wire:click="gotoPage(1)" placeholder="Procurar..."/>
+            <x-jet-input type="text" class="mt-1 block w-full" wire:model="filters.search" placeholder="Procurar..."/>
         </div>
-
         <x-jet-bar-table>
             <thead class="bg-gray-50">
                 <tr>
@@ -69,7 +68,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3" />
                                     </svg>
-                                @elseif ($sorts['sortDirection'] == 'asc')
+                                @elseif ($sorts['sortDirection'] == 'desc')
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18"/>
                                     </svg>
@@ -97,7 +96,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3" />
                                     </svg>
-                                @elseif ($sorts['sortDirection'] == 'asc')
+                                @elseif ($sorts['sortDirection'] == 'desc')
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18"/>
                                     </svg>
@@ -141,7 +140,7 @@
                         </x-jet-bar-table-data>
 
                         <x-jet-bar-table-data>
-                            <a href="#" class="text-indigo-600 text-lg hover:text-indigo-900">
+                            <a href="{{ route('admin.detailsAdmin', $userAdmin->id) }}" class="text-indigo-600 text-lg hover:text-indigo-900">
                                 <x-jet-bar-badge text="Visualizar detalhes" type="info"></x-jet-bar-badge>
                             </a>
                         </x-jet-bar-table-data>
