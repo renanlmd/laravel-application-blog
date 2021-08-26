@@ -9,7 +9,9 @@ class ViewDetailsAdmin extends Component
 {
     public $admin;
 
-    protected $listeners = ['manageActivationAdmin'];
+    public $currentUser = null;
+
+    protected $listeners = ['manageActivationAdmin', 'deleteAccount'];
 
     public $rules = [
         'admin.name' => 'required',
@@ -18,6 +20,12 @@ class ViewDetailsAdmin extends Component
     public function render()
     {
         return view('livewire.admin.gerencia.view-details-admin');
+    }
+    
+    public function mount()
+    {
+        $this->currentUser = $this->admin->id == auth()->user()->id ? true : false;
+
     }
 
     public function manageActivationAdmin($id)
@@ -76,5 +84,37 @@ class ViewDetailsAdmin extends Component
                 'id' => $user->id
             ]);
         }
+    }
+
+    public function confirmActionDeleteAdmin($id)
+    {
+        $user = User::findOrFail($id);
+        $this->dispatchBrowserEvent('swal:confirmDelete', [
+            'type' => 'warning',
+            'title' => 'Confirme a ação de bloqueio.',
+            'text' => 'Tem certeza que deseja deletar o usuario: ' . $user->username. ' ? 
+                Essa ação é irreversivel depois de executada.',
+            'id' => $user->id
+        ]);
+    }
+
+    public function deleteAccount(User $user)
+    {
+        try {
+            if($user->profile_photo_path){
+                $user->deleteProfilePhoto();
+            }
+            $user->tokens->each->delete();
+            $user->delete();
+
+            $this->dispatchBrowserEvent('swal:successDeleteAccount', [
+                'type' => 'success',
+                'title' => 'Conta deletado com sucesso!',
+                'text' => 'Usuario '. $user->username . ' foi excluído da plataforma.',
+            ]);
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+        
     }
 }

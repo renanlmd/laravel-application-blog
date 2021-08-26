@@ -51,13 +51,15 @@
                     <div class="text-center font-semibold pt-1"><span class=" text-lg">Ações:</span></div>
                     <div class="col-span-2 ">
                         @if($admin->activated)
-                            <button wire:click="confirmActionManageAdmin({{ $admin->id }})" class=" bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md w-full focus:outline-none">Bloquear</button>
+                            <button wire:click="confirmActionManageAdmin({{ $admin->id }})" class="@if($currentUser) bg-gray-500 disabled:opacity-50 cursor-not-allowed @else bg-gray-500 hover:bg-gray-700 @endif  text-white font-bold py-2 px-4 rounded-md w-full focus:outline-none" @if($currentUser) disabled @endif>Bloquear</button>
                         @else 
-                            <button wire:click="confirmActionManageAdmin({{$admin->id}})" class=" bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md w-full focus:outline-none">Desbloquear</button>
+                            <button wire:click="confirmActionManageAdmin({{ $admin->id }})" class="@if($currentUser) bg-gray-500 disabled:opacity-50 cursor-not-allowed @else bg-gray-500 hover:bg-gray-700 @endif text-white font-bold py-2 px-4 rounded-md w-full focus:outline-none" @if($currentUser) disabled @endif>Desbloquear</button>
                         @endif
                     </div>
+
                     <div class="col-span-2">
-                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md w-full">Deletar conta</button>
+
+                        <button wire:click="confirmActionDeleteAdmin({{ $admin->id }})" class="@if($currentUser) bg-red-500 disabled:opacity-50 cursor-not-allowed @else bg-red-500 hover:bg-red-700 @endif text-white font-bold py-2 px-4 rounded-md w-full focus:outline-none" @if($currentUser) disabled @endif>Deletar conta</button>
 
                     </div>
                     
@@ -95,5 +97,34 @@
                 timer: 3000
             });
         });
+
+        window.addEventListener('swal:confirmDelete', event => {
+            swal({
+                title: event.detail.title,
+                text: event.detail.text,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    window.livewire.emit('deleteAccount', event.detail.id)
+                } else {
+                    swal('Ação cancelada!');
+                }
+            });
+        });
+
+        window.addEventListener('swal:successDeleteAccount', event => {
+            swal({
+                title: event.detail.title,
+                text: event.detail.text,
+                icon: "success",
+                timer: 4000
+            }).then(function(){
+                window.location = 'http://localhost/admin/administradores';
+            });
+        });
+        
     </script>
 @endpush
