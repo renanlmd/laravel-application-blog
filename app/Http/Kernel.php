@@ -6,6 +6,7 @@ use App\Http\Middleware\IsAdminMiddleware;
 use App\Http\Middleware\IsUserDefaultMiddleware;
 use App\Http\Middleware\UpdateDefaultPasswordMiddleware;
 use App\Http\Middleware\VerifyUriToUsername;
+use App\Http\Middleware\VerifyUserAdminActivated;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -70,5 +71,6 @@ class Kernel extends HttpKernel
         'is_user_default' => IsUserDefaultMiddleware::class,
         'verify_uri_username' => VerifyUriToUsername::class,
         'update_default_password' => UpdateDefaultPasswordMiddleware::class,
+        'verify_user_activated' => VerifyUserAdminActivated::class,
     ];
 }

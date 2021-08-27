@@ -57,6 +57,7 @@
 
 @livewireScripts
 <script src="https://kit.fontawesome.com/d86845d251.js" crossorigin="anonymous"></script>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@stack('scripts')
 </body>
 </html>
