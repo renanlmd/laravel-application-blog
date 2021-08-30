@@ -90,4 +90,28 @@ class User extends Authenticatable
         })->orderBy($sorts['sortField'], $sorts['sortDirection'])->get();
 
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+    }
+
+    public function verifyPermissions()
+    {
+        $getPermissions = $this->load('roles.permissions')->roles->transform(function ($role) {
+            return $role->permissions->transform(function ($permission) {
+                return $permission->name;
+            });
+        });
+
+        $roles = [];
+        $i = 0;
+        foreach ($getPermissions as $role) {
+            foreach ($role as $value) {
+                $i++;
+                $roles[$i] = $value;
+            }
+        }
+        return $roles;
+    }
 }

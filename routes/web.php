@@ -25,6 +25,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','verified', 'verify_u
     Route::get('novo-admin', [\App\Http\Controllers\Admin\AdminController::class, 'createNewAdmin'])->name('createUserAdmin');
     Route::get('nova-senha', [\App\Http\Controllers\Admin\AdminController::class, 'updatePassword'])->name('defineNewPassword');
 
+    Route::get('funcoes', [\App\Http\Controllers\Admin\RolesController::class, 'index'])->name('roles');
+    Route::get('criar-funcao', [\App\Http\Controllers\Admin\RolesController::class, 'create'])->name('roles_create');
+
 });
 
 Route::prefix('/')->name('user.')->middleware(['auth:sanctum', 'verified', 'is_user_default'])->group(function(){
