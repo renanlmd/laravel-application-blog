@@ -26,7 +26,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','verified', 'verify_u
     Route::get('nova-senha', [\App\Http\Controllers\Admin\AdminController::class, 'updatePassword'])->name('defineNewPassword');
 
     Route::get('funcoes', [\App\Http\Controllers\Admin\RolesController::class, 'index'])->name('roles');
-    Route::get('criar-funcao', [\App\Http\Controllers\Admin\RolesController::class, 'create'])->name('roles_create');
+    Route::get('funcoes/criar-funcao', [\App\Http\Controllers\Admin\RolesController::class, 'create'])->name('roles_create');
+    Route::get('permissoes', [\App\Http\Controllers\Admin\PermissionsController::class, 'index'])->name('permissions');
+    Route::get('permissoes/nova-permissao', [\App\Http\Controllers\Admin\PermissionsController::class, 'create'])->name('permissions_create');
 
 });
 
