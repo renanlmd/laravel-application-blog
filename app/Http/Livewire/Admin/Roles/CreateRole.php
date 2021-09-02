@@ -19,16 +19,22 @@ class CreateRole extends Component
 
     public $permissionsChosen = array();
 
-    public $permissionsSelected = [];
+    public $permissionsSelected = array();
 
     public function render()
     {
         if($this->loadPermissions){
-            if(!empty($this->permissionsChosen)){
-                $this->listPermissions = Permission::hiddenPermissionsChosen($this->permissionsChosen);
+
+            if(!$this->termNamePermission) {
+
+                $this->listPermissions = !empty($this->permissionsChosen) ? 
+                    Permission::hiddenPermissionsChosen($this->permissionsChosen) :
+                    Permission::all();
             }else{
-                $this->listPermissions = Permission::limit(10)->get();
+
+                $this->listPermissions = Permission::searchNamePermission($this->termNamePermission);
             }
+            
         }
         return view('livewire.admin.roles.create-role');
     }
@@ -45,18 +51,21 @@ class CreateRole extends Component
         // }
     }
 
-    public function teste($term)
-    {
-        $this->termNamePermission = $term;
-    }
-
     public function permissionsSelected($permissionSelected)
     {
+        foreach ($this->permissionsSelected as $permission) {
+            if($permission['id'] == $permissionSelected['id']){
+                return session()->flash('permission_exists', 'Permissão já selecionado.');
+            }
+        }
+        
         $this->permissionsChosen[] = $permissionSelected['id'];
         $data = Permission::permissionsSelected($permissionSelected['id']);
         foreach ($data as $value) {
             $this->permissionsSelected[] = $value;
         }
+        $this->termNamePermission = null;
+        
     }
 
     public function closeSelectPermissions()

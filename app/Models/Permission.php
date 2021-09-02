@@ -21,4 +21,9 @@ class Permission extends Model
     {
         return $query->where('id', $permissionChosen)->get()->toArray();
     }
+
+    public function scopeSearchNamePermission(Builder $query, $term)
+    {
+        return $query->where("name", "like", "%$term%")->get();
+    }
 }
