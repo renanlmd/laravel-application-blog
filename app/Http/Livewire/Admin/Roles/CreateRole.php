@@ -5,11 +5,21 @@ namespace App\Http\Livewire\Admin\Roles;
 use Livewire\Component;
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\RolePermission;
 
 class CreateRole extends Component
 {
 
     public $role;
+
+    protected $rules = [
+        'role.name' => 'required|unique:roles,name'
+    ];
+
+    protected $messages = [
+        'role.name.required' => 'Defina o noma da função.',
+        'role.name.unique' => 'Escolha outro nome, não pode existir funções com mesmo nome.'
+    ];
 
     public $listPermissions;
 
@@ -41,14 +51,26 @@ class CreateRole extends Component
 
     public function create()
     {
-        // try {
+        $this->validate();
+        
+        if(empty($this->permissionsSelected)){
+            return session()->flash('permissions_required', 'É necessario definir permissões para a função');
+        }
+        
+        try {
 
-        //     Role::create($this->role);
-        //     return redirect()->route('admin.roles');
+            $role = Role::create($this->role);
+            foreach ($this->permissionsSelected as $permissions) {
+                RolePermission::create([
+                    'role_id' => $role->id,
+                    'permission_id' => $permissions['id']
+                ]);
+            }
+            return redirect()->route('admin.roles');
 
-        // } catch (\Exception $e) {
-        //     dd($e);
-        // }
+        } catch (\Exception $e) {
+            dd($e);
+        }
     }
 
     public function permissionsSelected($permissionSelected)
@@ -66,6 +88,14 @@ class CreateRole extends Component
         }
         $this->termNamePermission = null;
         
+    }
+
+    public function deletePermissionSelected($keyFromArray)
+    {
+        unset($this->permissionsChosen[$keyFromArray]);
+        unset($this->permissionsSelected[$keyFromArray]);
+        $this->termNamePermission = null;
+
     }
 
     public function closeSelectPermissions()
